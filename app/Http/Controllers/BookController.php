@@ -9,15 +9,34 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
     // Menampilkan semua buku
-    public function index()
-    {
-        $books = Book::with('category')
-            ->latest()
-            ->get();
+    public function index(Request $request)
+{
+    $query = Book::with('category')->latest();
 
-        return view('books.index', compact('books'));
+    // Pencarian berdasarkan judul atau penulis
+    if ($request->filled('search')) {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('author', 'like', '%' . $search . '%');
+        });
     }
 
+    // Filter berdasarkan kategori
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    $books = $query->get();
+
+    $categories = Category::orderBy('name')->get();
+
+    return view('books.index', compact(
+        'books',
+        'categories'
+    ));
+}
     // Menampilkan form tambah buku
     public function create()
     {

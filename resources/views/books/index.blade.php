@@ -124,6 +124,75 @@
         </div>
 
 
+        <!-- SEARCH & FILTER -->
+        <div class="search-panel">
+
+            <form
+                action="{{ route('books.index') }}"
+                method="GET"
+                class="search-form"
+            >
+
+                <div class="search-input-wrapper">
+
+                    <span class="search-icon">
+                        🔎
+                    </span>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari berdasarkan judul atau penulis..."
+                    >
+
+                </div>
+
+
+                <select name="category_id">
+
+                    <option value="">
+                        Semua Kategori
+                    </option>
+
+                    @foreach ($categories as $category)
+
+                        <option
+                            value="{{ $category->id }}"
+                            {{ request('category_id') == $category->id ? 'selected' : '' }}
+                        >
+                            {{ $category->name }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    Cari
+                </button>
+
+
+                @if (request('search') || request('category_id'))
+
+                    <a
+                        href="{{ route('books.index') }}"
+                        class="reset-button"
+                    >
+                        Reset
+                    </a>
+
+                @endif
+
+            </form>
+
+        </div>
+
+
         <!-- TABLE -->
         <div class="table-container">
 
@@ -806,7 +875,130 @@
             margin-bottom: 17px;
         }
 
+        /* =========================================
+        SEARCH & FILTER
+        ========================================= */
 
+        .search-panel {
+            padding: 15px 22px;
+            background: #fafbff;
+            border-bottom: 1px solid #eef0f4;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: 100%;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px 0 36px;
+
+            border: 1px solid #dfe3ea;
+            border-radius: 8px;
+
+            background: white;
+            color: #1f2937;
+
+            font-size: 11px;
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        .search-input-wrapper input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.07);
+        }
+
+        .search-input-wrapper input::placeholder {
+            color: #a3aab5;
+        }
+
+        .search-form select {
+            width: 180px;
+            height: 40px;
+
+            padding: 0 10px;
+
+            border: 1px solid #dfe3ea;
+            border-radius: 8px;
+
+            background: white;
+            color: #475569;
+
+            font-size: 11px;
+
+            outline: none;
+        }
+
+        .search-form select:focus {
+            border-color: #4f46e5;
+        }
+
+        .search-button {
+            height: 40px;
+
+            padding: 0 16px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #172554;
+            color: white;
+
+            font-size: 11px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .search-button:hover {
+            background: #1e3a8a;
+        }
+
+        .reset-button {
+            height: 40px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 13px;
+
+            border-radius: 8px;
+
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+
+            color: #64748b;
+
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .reset-button:hover {
+            background: #e2e8f0;
+        }
         /* =========================================
            RESPONSIVE
         ========================================= */
@@ -871,6 +1063,28 @@
 
         }
 
+        @media (max-width: 700px) {
+
+        .search-form {
+            flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+            width: 100%;
+            flex: none;
+        }
+
+        .search-form select {
+            flex: 1;
+            width: auto;
+        }
+
+        .search-button,
+        .reset-button {
+            flex: 0 0 auto;
+        }
+
+    }
     </style>
 
     @endpush
