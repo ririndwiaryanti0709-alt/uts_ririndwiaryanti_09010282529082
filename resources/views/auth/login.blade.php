@@ -11,6 +11,7 @@
     >
 
     <title>Login - Library Hub</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logoririn.png') }}">
 
     <style>
 
